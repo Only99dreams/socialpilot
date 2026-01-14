@@ -40,9 +40,8 @@ const Login = () => {
       if (error) throw error;
       toast({ title: "Welcome back!", description: "Successfully signed in." });
       navigate("/dashboard");
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to sign in";
-      toast({ title: "Error", description: message, variant: "destructive" });
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message || "Failed to sign in", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }

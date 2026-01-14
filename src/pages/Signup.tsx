@@ -42,11 +42,10 @@ const Signup = () => {
       });
 
       navigate("/onboarding");
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to create account";
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: message,
+        description: error.message || "Failed to create account",
         variant: "destructive",
       });
     } finally {

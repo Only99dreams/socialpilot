@@ -37,7 +37,7 @@ const mainNavItems = [
 ];
 
 const settingsNavItems = [
-  { icon: Bot, label: 'AI Memory', path: '/memory' },
+  { icon: Bot, label: 'AI Agent', path: '/agent' },
   { icon: Users, label: 'Accounts', path: '/accounts' },
   { icon: Settings, label: 'Settings', path: '/settings' },
 ];

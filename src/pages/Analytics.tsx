@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
 import { 
   TrendingUp, 
   Users, 
@@ -14,13 +12,12 @@ import {
   Bot,
   Zap,
   Target,
-  BarChart3,
-  RefreshCw
+  BarChart3
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { 
   ChartContainer, 
   ChartTooltip, 
@@ -122,97 +119,26 @@ const StatCard = ({
 
 export default function Analytics() {
   const [timeRange, setTimeRange] = useState('7d');
-  const [isLoading, setIsLoading] = useState(true);
-  const [businessId, setBusinessId] = useState<string | null>(null);
-  const [realStats, setRealStats] = useState({
-    totalReach: 0,
-    engagementRate: 0,
-    comments: 0,
-    shares: 0,
-  });
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/login");
-        return;
-      }
-
-      // Fetch business
-      const { data: businesses } = await supabase
-        .from("businesses")
-        .select("*")
-        .limit(1);
-
-      if (businesses && businesses.length > 0) {
-        setBusinessId(businesses[0].id);
-        
-        // Fetch posts for analytics
-        const { data: posts } = await supabase
-          .from("posts")
-          .select("*")
-          .eq("business_id", businesses[0].id)
-          .eq("status", "published");
-
-        if (posts) {
-          // Calculate real stats from posts
-          const reach = posts.length * 500 + Math.floor(Math.random() * 1000);
-          const engagement = posts.length > 0 ? Number((Math.random() * 3 + 3).toFixed(1)) : 0;
-          const comments = posts.length * 4 + Math.floor(Math.random() * 50);
-          const shares = posts.length * 1.5 + Math.floor(Math.random() * 20);
-
-          setRealStats({
-            totalReach: reach,
-            engagementRate: engagement,
-            comments,
-            shares,
-          });
-        }
-      } else {
-        navigate("/onboarding");
-      }
-
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, [navigate]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <RefreshCw className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading analytics...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-background">
         <DashboardSidebar />
         
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
+        <main className="flex-1 p-6 overflow-auto">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6"
           >
-            <div className="flex items-start gap-3">
-              <SidebarTrigger className="md:hidden mt-1" />
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold">Analytics</h1>
-                <p className="text-muted-foreground">Track your social media performance and AI insights</p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold">Analytics</h1>
+              <p className="text-muted-foreground">Track your social media performance and AI insights</p>
             </div>
             
             <Tabs value={timeRange} onValueChange={setTimeRange}>
-              <TabsList className="bg-card border border-border w-full md:w-auto overflow-x-auto justify-start">
+              <TabsList className="bg-card border border-border">
                 <TabsTrigger value="7d">7 Days</TabsTrigger>
                 <TabsTrigger value="30d">30 Days</TabsTrigger>
                 <TabsTrigger value="90d">90 Days</TabsTrigger>
@@ -229,31 +155,31 @@ export default function Analytics() {
           >
             <StatCard 
               title="Total Reach" 
-              value={realStats.totalReach.toLocaleString()} 
+              value="24.5K" 
               change="12.3%" 
               icon={Eye} 
               trend="up" 
             />
             <StatCard 
               title="Engagement Rate" 
-              value={`${realStats.engagementRate}%`} 
+              value="4.8%" 
               change="0.5%" 
               icon={Heart} 
               trend="up" 
             />
             <StatCard 
               title="Comments" 
-              value={realStats.comments.toString()} 
+              value="485" 
               change="8.2%" 
               icon={MessageCircle} 
               trend="up" 
             />
             <StatCard 
               title="Shares" 
-              value={realStats.shares.toString()} 
+              value="179" 
               change="2.1%" 
               icon={Share2} 
-              trend="up" 
+              trend="down" 
             />
           </motion.div>
 

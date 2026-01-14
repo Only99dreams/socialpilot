@@ -4,7 +4,6 @@ import {
   Users, 
   Settings, 
   Shield,
-  CreditCard,
   ArrowLeft
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -26,8 +25,7 @@ const adminNavItems = [
   { icon: LayoutDashboard, label: 'Overview', path: '/admin' },
   { icon: Building2, label: 'Businesses', path: '/admin?tab=businesses' },
   { icon: Users, label: 'User Roles', path: '/admin?tab=roles' },
-  { icon: CreditCard, label: 'Subscriptions', path: '/admin?tab=subscriptions' },
-  { icon: Settings, label: 'Settings', path: '/admin?tab=settings' },
+  { icon: Settings, label: 'Settings', path: '/admin/settings' },
 ];
 
 export function AdminSidebar() {

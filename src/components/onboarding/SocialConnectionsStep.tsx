@@ -4,7 +4,6 @@ import { ArrowLeft, ArrowRight, Check, ExternalLink, Loader2 } from "lucide-reac
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { OnboardingData } from "@/pages/Onboarding";
-import type { Database } from "@/integrations/supabase/types";
 
 const platforms = [
   {
@@ -56,9 +55,7 @@ export const SocialConnectionsStep = ({ data, updateData, businessId, onNext, on
   const [connectingPlatform, setConnectingPlatform] = useState<string | null>(null);
   const { toast } = useToast();
 
-  type PlatformId = Database["public"]["Enums"]["social_platform"];
-
-  const handleConnect = async (platformId: PlatformId) => {
+  const handleConnect = async (platformId: string) => {
     setConnectingPlatform(platformId);
 
     // Simulate OAuth flow - in production, this would redirect to the platform's OAuth
@@ -68,7 +65,7 @@ export const SocialConnectionsStep = ({ data, updateData, businessId, onNext, on
 
       const { error } = await supabase.from("social_connections").insert({
         business_id: businessId,
-        platform: platformId,
+        platform: platformId as any,
         is_connected: true,
         account_name: `@${data.businessName.toLowerCase().replace(/\s+/g, "")}`,
       });
@@ -81,11 +78,10 @@ export const SocialConnectionsStep = ({ data, updateData, businessId, onNext, on
         title: `${platforms.find((p) => p.id === platformId)?.name} connected!`,
         description: "Your account has been successfully linked.",
       });
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Please try again";
+    } catch (error: any) {
       toast({
         title: "Connection failed",
-        description: message,
+        description: error.message || "Please try again",
         variant: "destructive",
       });
     } finally {
@@ -93,7 +89,7 @@ export const SocialConnectionsStep = ({ data, updateData, businessId, onNext, on
     }
   };
 
-  const isConnected = (platformId: PlatformId) => data.connectedPlatforms.includes(platformId);
+  const isConnected = (platformId: string) => data.connectedPlatforms.includes(platformId);
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -130,14 +126,14 @@ export const SocialConnectionsStep = ({ data, updateData, businessId, onNext, on
                 </div>
               </div>
 
-              {isConnected(platform.id as PlatformId) ? (
+              {isConnected(platform.id) ? (
                 <div className="flex items-center gap-2 text-primary">
                   <Check className="w-5 h-5" />
                   <span className="font-medium">Connected</span>
                 </div>
               ) : (
                 <Button
-                  onClick={() => handleConnect(platform.id as PlatformId)}
+                  onClick={() => handleConnect(platform.id)}
                   variant="outline"
                   disabled={connectingPlatform !== null}
                   className="min-w-[120px]"

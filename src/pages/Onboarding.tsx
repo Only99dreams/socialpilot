@@ -7,7 +7,6 @@ import { useToast } from "@/hooks/use-toast";
 import { BusinessSetupStep } from "@/components/onboarding/BusinessSetupStep";
 import { SocialConnectionsStep } from "@/components/onboarding/SocialConnectionsStep";
 import { AgentModeStep } from "@/components/onboarding/AgentModeStep";
-import type { Database } from "@/integrations/supabase/types";
 
 export type OnboardingData = {
   businessName: string;
@@ -65,7 +64,7 @@ const Onboarding = () => {
           user_id: user.id,
           name: data.businessName,
           website_url: data.websiteUrl,
-          brand_tone: data.brandTone as Database["public"]["Enums"]["brand_tone"],
+          brand_tone: data.brandTone as any,
           brand_keywords: data.brandKeywords,
         })
         .select()
@@ -80,11 +79,10 @@ const Onboarding = () => {
         title: "Business profile created!",
         description: "Now let's connect your social accounts.",
       });
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to save business info";
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: message,
+        description: error.message || "Failed to save business info",
         variant: "destructive",
       });
     } finally {
@@ -106,7 +104,7 @@ const Onboarding = () => {
         .from("ai_agents")
         .insert({
           business_id: businessId,
-          mode: data.agentMode as Database["public"]["Enums"]["agent_mode"],
+          mode: data.agentMode as any,
           status: "learning",
         });
 
@@ -118,11 +116,10 @@ const Onboarding = () => {
       });
 
       navigate("/dashboard");
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to activate agent";
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: message,
+        description: error.message || "Failed to activate agent",
         variant: "destructive",
       });
     } finally {

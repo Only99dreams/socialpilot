@@ -11,9 +11,6 @@ import Dashboard from "./pages/Dashboard";
 import Calendar from "./pages/Calendar";
 import Generator from "./pages/Generator";
 import Analytics from "./pages/Analytics";
-import Library from "./pages/Library";
-import AIMemory from "./pages/AIMemory";
-import Settings from "./pages/Settings";
 import AdminDashboard from "./pages/AdminDashboard";
 import ModeratorDashboard from "./pages/ModeratorDashboard";
 import NotFound from "./pages/NotFound";
@@ -35,9 +32,6 @@ const App = () => (
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/generator" element={<Generator />} />
           <Route path="/analytics" element={<Analytics />} />
-          <Route path="/library" element={<Library />} />
-          <Route path="/memory" element={<AIMemory />} />
-          <Route path="/settings" element={<Settings />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/moderator" element={<ModeratorDashboard />} />
           <Route path="*" element={<NotFound />} />

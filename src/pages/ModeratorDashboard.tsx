@@ -30,7 +30,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { useRoles } from '@/hooks/useRoles';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -285,22 +285,19 @@ export default function ModeratorDashboard() {
       <div className="flex min-h-screen w-full bg-background">
         <DashboardSidebar />
         
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
+        <main className="flex-1 p-6 overflow-auto">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6"
+            className="flex items-center justify-between mb-6"
           >
-            <div className="flex items-start gap-3">
-              <SidebarTrigger className="md:hidden mt-1" />
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2">
-                  <UserCog className="w-8 h-8 text-amber-400" />
-                  Moderator Dashboard
-                </h1>
-                <p className="text-muted-foreground">Review and approve content before publishing</p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold flex items-center gap-2">
+                <UserCog className="w-8 h-8 text-amber-400" />
+                Moderator Dashboard
+              </h1>
+              <p className="text-muted-foreground">Review and approve content before publishing</p>
             </div>
           </motion.div>
 
@@ -376,7 +373,7 @@ export default function ModeratorDashboard() {
           >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="bg-card border border-border w-full overflow-x-auto justify-start">
+                <TabsList className="bg-card border border-border">
                   <TabsTrigger value="pending" className="gap-2">
                     <Clock className="w-4 h-4" />
                     Pending ({stats.pending})
@@ -419,6 +416,14 @@ export default function ModeratorDashboard() {
                 {activeTab === 'all' && allPosts.map(post => (
                   <PostCard key={post.id} post={post} />
                 ))}
+                
+                {((activeTab === 'pending' && pendingPosts.length === 0) ||
+                  (activeTab === 'scheduled' && scheduledPosts.length === 0) ||
+                  (activeTab === 'all' && allPosts.length === 0)) && (
+                  <div className="col-span-full text-center py-12 text-muted-foreground">
+                    No posts found
+                  </div>
+                )}
               </div>
             )}
           </motion.div>

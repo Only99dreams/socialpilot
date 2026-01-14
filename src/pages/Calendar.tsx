@@ -20,7 +20,7 @@ import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar';
 import { DragDropCalendarGrid } from '@/components/calendar/DragDropCalendarGrid';
 import { PostCard } from '@/components/calendar/PostCard';
 import { CreatePostDialog } from '@/components/calendar/CreatePostDialog';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { usePostsRealtime } from '@/hooks/usePostsRealtime';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -93,19 +93,16 @@ export default function Calendar() {
       <div className="flex min-h-screen w-full bg-background">
         <DashboardSidebar />
         
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
+        <main className="flex-1 p-6 overflow-auto">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6"
           >
-            <div className="flex items-start gap-3">
-              <SidebarTrigger className="md:hidden mt-1" />
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold">Content Calendar</h1>
-                <p className="text-muted-foreground">Plan and schedule your social media posts • Drag posts to reschedule</p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold">Content Calendar</h1>
+              <p className="text-muted-foreground">Plan and schedule your social media posts • Drag posts to reschedule</p>
             </div>
             
             <div className="flex items-center gap-3">
@@ -136,7 +133,7 @@ export default function Calendar() {
           >
             {/* Platform Filter */}
             <Tabs value={selectedPlatform} onValueChange={setSelectedPlatform}>
-              <TabsList className="bg-card border border-border w-full overflow-x-auto justify-start">
+              <TabsList className="bg-card border border-border">
                 <TabsTrigger value="all" className="gap-2">
                   <Filter className="w-4 h-4" />
                   All

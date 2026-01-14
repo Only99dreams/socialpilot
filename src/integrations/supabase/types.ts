@@ -14,27 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      app_settings: {
-        Row: {
-          key: string
-          value: Json
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          key: string
-          value?: Json
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          key?: string
-          value?: Json
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       ai_agents: {
         Row: {
           business_id: string
@@ -212,82 +191,41 @@ export type Database = {
           },
         ]
       }
-      subscriptions: {
-        Row: {
-          cancel_at_period_end: boolean
-          created_at: string
-          current_period_end: string | null
-          current_period_start: string | null
-          business_id: string
-          id: string
-          plan: string
-          status: string
-          updated_at: string
-        }
-        Insert: {
-          cancel_at_period_end?: boolean
-          created_at?: string
-          current_period_end?: string | null
-          current_period_start?: string | null
-          business_id: string
-          id?: string
-          plan?: string
-          status?: string
-          updated_at?: string
-        }
-        Update: {
-          cancel_at_period_end?: boolean
-          created_at?: string
-          current_period_end?: string | null
-          current_period_start?: string | null
-          business_id?: string
-          id?: string
-          plan?: string
-          status?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "subscriptions_business_id_fkey"
-            columns: ["business_id"]
-            isOneToOne: true
-            referencedRelation: "businesses"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       subscription_plans: {
         Row: {
-          code: string
           created_at: string
-          currency: string
+          description: string | null
+          features: Json | null
           id: string
-          is_active: boolean
+          is_active: boolean | null
           name: string
           price_monthly: number
-          sort_order: number
+          price_yearly: number | null
+          sort_order: number | null
           updated_at: string
         }
         Insert: {
-          code: string
           created_at?: string
-          currency?: string
+          description?: string | null
+          features?: Json | null
           id?: string
-          is_active?: boolean
+          is_active?: boolean | null
           name: string
           price_monthly?: number
-          sort_order?: number
+          price_yearly?: number | null
+          sort_order?: number | null
           updated_at?: string
         }
         Update: {
-          code?: string
           created_at?: string
-          currency?: string
+          description?: string | null
+          features?: Json | null
           id?: string
-          is_active?: boolean
+          is_active?: boolean | null
           name?: string
           price_monthly?: number
-          sort_order?: number
+          price_yearly?: number | null
+          sort_order?: number | null
           updated_at?: string
         }
         Relationships: []
@@ -312,6 +250,47 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_subscriptions: {
+        Row: {
+          created_at: string
+          ends_at: string | null
+          id: string
+          plan_id: string | null
+          starts_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          plan_id?: string | null
+          starts_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          plan_id?: string | null
+          starts_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

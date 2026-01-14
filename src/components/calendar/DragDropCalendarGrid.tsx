@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { 
   DndContext, 
   DragEndEvent, 
-  DragStartEvent,
   DragOverlay,
   useSensor,
   useSensors,
@@ -81,7 +80,7 @@ export function DragDropCalendarGrid({
     return date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
   };
 
-  const handleDragStart = (event: DragStartEvent) => {
+  const handleDragStart = (event: any) => {
     const post = event.active.data.current?.post;
     if (post) {
       setActivePost(post);

@@ -2,12 +2,9 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 
 const plans = [
   {
-    code: "starter",
     name: "Starter",
     description: "Perfect for small businesses just getting started",
     price: 29,
@@ -23,7 +20,6 @@ const plans = [
     popular: false,
   },
   {
-    code: "pro",
     name: "Pro",
     description: "For growing businesses that need more power",
     price: 79,
@@ -41,7 +37,6 @@ const plans = [
     popular: true,
   },
   {
-    code: "agency",
     name: "Agency",
     description: "For agencies managing multiple brands",
     price: 199,
@@ -61,49 +56,6 @@ const plans = [
 ];
 
 export const Pricing = () => {
-  const [priceByCode, setPriceByCode] = useState<Record<string, number>>({});
-
-  useEffect(() => {
-    let cancelled = false;
-
-    type SubscriptionPlanRow = {
-      code: string;
-      price_monthly: number;
-      is_active: boolean;
-    };
-
-    const run = async () => {
-      const { data, error } = await supabase
-        .from("subscription_plans")
-        .select("code, price_monthly, is_active")
-        .eq("is_active", true)
-        .returns<SubscriptionPlanRow[]>();
-
-      if (cancelled) return;
-      if (error) return;
-
-      const map: Record<string, number> = {};
-      for (const row of data || []) {
-        const code = String(row.code || "").toLowerCase();
-        const price = Number(row.price_monthly);
-        if (code && Number.isFinite(price)) map[code] = price;
-      }
-      setPriceByCode(map);
-    };
-
-    run();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const mergedPlans = useMemo(() => {
-    return plans.map((p) => ({
-      ...p,
-      price: priceByCode[p.code] ?? p.price,
-    }));
-  }, [priceByCode]);
-
   return (
     <section id="pricing" className="py-24 relative">
       <div className="container mx-auto px-4">
@@ -126,7 +78,7 @@ export const Pricing = () => {
 
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {mergedPlans.map((plan, index) => (
+          {plans.map((plan, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}

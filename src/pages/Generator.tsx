@@ -23,7 +23,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { useToast } from '@/hooks/use-toast';
 import { analyzeWebsite, generateContent, type BusinessProfile, type GeneratedPost } from '@/lib/api/business-intelligence';
 import { cn } from '@/lib/utils';
@@ -140,20 +140,17 @@ export default function Generator() {
       <div className="flex min-h-screen w-full bg-background">
         <DashboardSidebar />
         
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
+        <main className="flex-1 p-6 overflow-auto">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-start gap-3">
-              <SidebarTrigger className="md:hidden mt-1" />
-              <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3">
-                <Sparkles className="w-8 h-8 text-primary" />
-                AI Content Generator
-              </h1>
-            </div>
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <Sparkles className="w-8 h-8 text-primary" />
+              AI Content Generator
+            </h1>
             <p className="text-muted-foreground mt-1">
               Analyze your brand and generate on-brand social content in seconds
             </p>
